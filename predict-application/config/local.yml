@@ -1,0 +1,60 @@
+database:
+  driverClass: com.mysql.cj.jdbc.Driver
+  user: root
+  password: password
+  url: jdbc:mysql://localhost:3306/predict?useUnicode=true&nullNamePatternMatchesAll=true
+  properties:
+    useSSL: false
+    hibernate.dialect: org.hibernate.dialect.MySQLDialect
+    hibernate.session.events.log: false
+    hibernate.jdbc.batch_size: 100
+  maxWaitForConnection: 1s
+  validationQuery: "/* MyApplication Health Check */ SELECT 1"
+  minSize: 8
+  maxSize: 1000
+  checkConnectionWhileIdle: false
+  checkConnectionOnBorrow: true
+  maxConnectionAge: 2 hours
+
+eventReporterJerseyClient:
+  timeout: 60 seconds
+  connectionTimeout: 30 seconds
+  connectionRequestTimeout: 60 seconds
+  validateAfterInactivityPeriod: 5 seconds
+  timeToLive: 1h
+  cookiesEnabled: false
+  maxConnections: 1024
+  maxConnectionsPerRoute: 1024
+  keepAlive: 5 minutes
+  retries: 3
+  userAgent: gcm-provider (Apache Default HttpClient)
+  minThreads: 5
+  maxThreads: 50
+  workQueueSize: 4000
+  gzipEnabled: true
+  gzipEnabledForRequests: false
+  chunkedEncodingEnabled: false
+
+server:
+  allowedMethods: [GET, POST]
+  applicationConnectors:
+    - type: http
+      port: 9999
+  adminConnectors:
+    - type: http
+      port: 8888
+
+logging:
+  level: INFO
+  appenders:
+    - type: file
+      currentLogFilename: /var/log/webengage/predict.log
+      threshold: ALL
+      archive: true
+      archivedLogFilenamePattern: /var/log/webengage/predict-%d.log
+      archivedFileCount: 5
+      timeZone: IST
+      logFormat: "%-5p [%d{\"yyyy-MM-dd HH:mm:ss,SSS Z\",IST}] [%t] [%X{Tracker-Id}] %c: %m %n%rEx"
+    - type: console
+      timeZone: IST
+      logFormat: "%-5p [%d{\"yyyy-MM-dd HH:mm:ss,SSS Z\",IST}] [%t] [%X{Tracker-Id}] %c: %m %n%rEx"
